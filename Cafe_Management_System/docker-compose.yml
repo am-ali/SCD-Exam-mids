@@ -1,0 +1,69 @@
+
+services:
+  mongo:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    restart: unless-stopped
+
+
+  api_gateway:
+    build: ./api-gateway
+    container_name: api_gateway
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+  customer:
+    build: ./customer-services
+    container_name: customer_service
+    ports:
+      - "3005:3005"
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+  inventory:
+    build: ./inventory-services
+    container_name: inventory_service
+    ports:
+      - "3004:3004"
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+  menu:
+    build: ./menu-services
+    container_name: Menu_service
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+  order:
+    build: ./order-services
+    container_name: order_service
+    ports:
+      - "3002:3002"
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+  payment:
+    build: ./payment-services
+    container_name: payment_service
+    ports:
+      - "3003:3003"
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+
+volumes:
+  mongo-data:
